@@ -1,26 +1,31 @@
-class MyArray extends Array {}
+class MyArray {
+  constructor(...items) {
+    this.items = items;
+  }
 
-MyArray.prototype.flat = function(depth = 1) {
-  const result = new MyArray();
+  flat(depth = 1) {
+    const result = [];
 
-  const flatten = (arr, currentDepth) => {
-    arr.forEach(item => {
-      if (item instanceof MyArray && currentDepth > 0) {
-        flatten(item, currentDepth - 1);
-      } else {
-        result.push(item);
-      }
-    });
-  };
+    const flatten = (arr, currentDepth) => {
+      arr.forEach(item => {
+        if (Array.isArray(item) && currentDepth > 0) {
+          flatten(item, currentDepth - 1);
+        } else {
+          result.push(item);
+        }
+      });
+    };
 
-  flatten(this, depth);
-  return result;
-};
+    flatten(this.items, depth);
+
+    return result;
+  }
+}
 
 // тест
 const arr = new MyArray(
   1,
-  new MyArray(2, new MyArray(3, 4)),
+  [2, [3, 4]],
   5
 );
 
